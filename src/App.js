@@ -1,5 +1,4 @@
 import React from 'react'
-import Plugin from "./Plugin";
 
 const query = {
     me: {
@@ -9,9 +8,7 @@ const query = {
 
 const MyApp = () => (
     <div>
-        <Plugin
-            pluginSource={'http://localhost:3002/plugin.html'}
-        />
+        <h1>My App</h1>
     </div>
 )
 

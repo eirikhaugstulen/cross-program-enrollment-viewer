@@ -1,80 +1,82 @@
-import React from "react";
+import React, {useState} from "react";
+import i18n from "@dhis2/d2-i18n";
+import {Button} from "@dhis2/ui";
 import './Plugin.module.css';
-import {IDataEntryPluginProps} from "./Plugin.types";
+import { EnrollmentOverviewProps } from "./Plugin.types";
+import {WidgetCollapsible} from "./Components/WidgetCollapsible";
+import {EnrollmentViewer} from "./Components/EnrollmentViewer";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {buildUrlQueryString} from "./utils/buildURLQueryString";
 
-const PluginInner = (propsFromParent: IDataEntryPluginProps) => {
+const queryClient = new QueryClient();
+
+const PluginInner = (propsFromParent: EnrollmentOverviewProps) => {
+    const [open, setOpen] = useState(true);
+
     const {
-        values,
-        errors,
-        warnings,
-        fieldsMetadata,
-        formSubmitted,
-        setFieldValue,
-        setContextFieldValue,
+        programId,
+        enrollmentId,
+        orgUnitId,
+        teiId,
+        navigate,
     } = propsFromParent;
 
     return (
-        <div style={{
-            backgroundColor: 'white',
-            width: '100vw',
-            display: 'flex',
-        }}>
-            <div
-                style={{
-                    padding: '10px',
-                    width: '100%',
-                }}
-            >
-                <h3>Hello from a plugin 👋</h3>
-
-                <p>Fields metadata:</p>
-                <pre>{JSON.stringify(fieldsMetadata, null, 2)}</pre>
-
-                <p>Values:</p>
-                <pre>{JSON.stringify(values, null, 2)}</pre>
-
-                <p>Errors:</p>
-                <pre>{JSON.stringify(errors, null, 2)}</pre>
-
-                <p>Warnings:</p>
-                <pre>{JSON.stringify(warnings, null, 2)}</pre>
-
-                <p>Save attempted:</p>
-                <pre>{JSON.stringify(formSubmitted, null, 2)}</pre>
-
-                <br />
-
-                <button
-                    style={{ marginTop: '10px' }}
-                    onClick={() => {
-                        setFieldValue({
-                            fieldId: 'village',
-                            value: 'NVP only',
-                            options: {
-                                error: 'This is an error',
-                            }
-                        })
+        <QueryClientProvider
+            client={queryClient}
+        >
+            <div style={{
+                backgroundColor: 'white',
+                width: '100vw',
+                display: 'flex',
+                margin: 0,
+                padding: 0,
+            }}>
+                <div
+                    style={{
+                        width: '100%',
                     }}
                 >
-                    Set value with error
-                </button>
+                    <WidgetCollapsible
+                        header={'Other programs'}
+                        borderless={false}
+                        open={open}
+                        onOpen={() => setOpen(true)}
+                        onClose={() => setOpen(false)}
+                    >
+                        <div
+                            style={{
+                                padding: '15px',
+                                paddingTop: 0,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '15px',
+                            }}
+                        >
+                            <EnrollmentViewer
+                                programId={programId}
+                                enrollmentId={enrollmentId}
+                                orgUnitId={orgUnitId}
+                                teiId={teiId}
+                                navigate={navigate}
+                            />
 
-                <button
-                    style={{ marginTop: '10px' }}
-                    onClick={() => {
-                        setContextFieldValue({
-                            fieldId: 'geometry',
-                            value: {
-                                latitude: 60.0001,
-                                longitude: 60.0001,
-                            },
-                        })
-                    }}
-                >
-                    Set coordinates
-                </button>
+                            <div>
+                                <Button
+                                    primary
+                                    onClick={() => navigate(`enrollment?${buildUrlQueryString({
+                                        orgUnitId,
+                                        teiId,
+                                    })}`)}
+                                >
+                                    {i18n.t('Return to dashboard')}
+                                </Button>
+                            </div>
+                        </div>
+                    </WidgetCollapsible>
+                </div>
             </div>
-        </div>
+        </QueryClientProvider>
     )
 }
 
