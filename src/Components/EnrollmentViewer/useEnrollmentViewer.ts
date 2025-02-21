@@ -1,5 +1,6 @@
 import {useDataEngine} from "@dhis2/app-runtime";
 import {useQuery} from "@tanstack/react-query";
+import { useMemo } from "react";
 
 type Props = {
     teiId: string;
@@ -43,7 +44,7 @@ export const useEnrollmentViewer = ({ teiId, programId }: Props) => {
                 .enrollments
                 .enrollments
                 .filter((enrollment: any) => enrollment.program !== programId)
-                .map(({ enrollment, program: enrollmentProgramId }: any) => {
+                .map(({ enrollment, status, program: enrollmentProgramId }: any) => {
                     const selectedProgram = programData?.find((program: any) => program.id === enrollmentProgramId);
                     return ({
                         enrollment,
@@ -52,15 +53,46 @@ export const useEnrollmentViewer = ({ teiId, programId }: Props) => {
                         icon: {
                             color: selectedProgram?.style?.color,
                             icon: selectedProgram?.style?.icon,
-                        }
+                        },
+                        status,
                     });
                 });
         },
     });
 
+    const {
+        hasEnrollments,
+        activeEnrollments,
+        otherEnrollments,
+    } = useMemo(() => {
+        if (!enrollmentData) return {
+            hasEnrollments: undefined,
+            activeEnrollments: undefined,
+            otherEnrollments: undefined,
+        };
+
+        const hasEnrollments = enrollmentData.length > 0;
+
+        const { activeEnrollments, otherEnrollments } = enrollmentData.reduce((acc: any, enrollment: any) => {
+            if (enrollment.status === 'ACTIVE') {
+                acc.activeEnrollments.push(enrollment);
+            } else {
+                acc.otherEnrollments.push(enrollment);
+            }
+            return acc;
+        }, { activeEnrollments: [], otherEnrollments: [] });
+
+        return {
+            hasEnrollments,
+            activeEnrollments,
+            otherEnrollments,
+        };
+    }, [enrollmentData]);
 
     return {
-        enrollments: enrollmentData ?? [],
+        hasEnrollments,
+        activeEnrollments,
+        otherEnrollments,
         isLoading,
         isError,
         error,

@@ -1,12 +1,10 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import i18n from "@dhis2/d2-i18n";
-import {Button} from "@dhis2/ui";
-import './Plugin.module.css';
+import styles from './Plugin.module.css';
 import { EnrollmentOverviewProps } from "./Plugin.types";
-import {WidgetCollapsible} from "./Components/WidgetCollapsible";
-import {EnrollmentViewer} from "./Components/EnrollmentViewer";
-import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
-import {buildUrlQueryString} from "./utils/buildURLQueryString";
+import { WidgetCollapsible } from "./Components/WidgetCollapsible";
+import { EnrollmentViewer } from "./Components/EnrollmentViewer";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
@@ -25,34 +23,16 @@ const PluginInner = (propsFromParent: EnrollmentOverviewProps) => {
         <QueryClientProvider
             client={queryClient}
         >
-            <div style={{
-                backgroundColor: 'white',
-                width: '100vw',
-                display: 'flex',
-                margin: 0,
-                padding: 0,
-            }}>
-                <div
-                    style={{
-                        width: '100%',
-                    }}
-                >
+            <div className={styles.container}>
+                <div className={styles.contentWrapper}>
                     <WidgetCollapsible
-                        header={'Other programs'}
+                        header={i18n.t("Other programs")}
                         borderless={false}
                         open={open}
                         onOpen={() => setOpen(true)}
                         onClose={() => setOpen(false)}
                     >
-                        <div
-                            style={{
-                                padding: '15px',
-                                paddingTop: 0,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '15px',
-                            }}
-                        >
+                        <div className={styles.enrollmentContent}>
                             <EnrollmentViewer
                                 programId={programId}
                                 enrollmentId={enrollmentId}
@@ -60,18 +40,6 @@ const PluginInner = (propsFromParent: EnrollmentOverviewProps) => {
                                 teiId={teiId}
                                 navigate={navigate}
                             />
-
-                            <div>
-                                <Button
-                                    primary
-                                    onClick={() => navigate(`enrollment?${buildUrlQueryString({
-                                        orgUnitId,
-                                        teiId,
-                                    })}`)}
-                                >
-                                    {i18n.t('Return to dashboard')}
-                                </Button>
-                            </div>
                         </div>
                     </WidgetCollapsible>
                 </div>

@@ -1,7 +1,11 @@
 import React from "react";
-import {Button} from "@dhis2/ui";
-import {buildUrlQueryString} from "../../utils/buildURLQueryString";
-import {useEnrollmentViewer} from "./useEnrollmentViewer";
+import { buildUrlQueryString } from "../../utils/buildURLQueryString";
+import { useEnrollmentViewer } from "./useEnrollmentViewer";
+import { EnrollmentList } from "../EnrollmentList";
+import { LoadingSpinner } from "../LoadingSpinner";
+import { NoEnrollments } from "../NoEnrollments/NoEnrollments";
+import styles from './EnrollmentViewer.module.css';
+import i18n from "@dhis2/d2-i18n";
 
 type Props = {
     programId: string,
@@ -18,49 +22,44 @@ export const EnrollmentViewer = ({
     navigate,
 }: Props) => {
     const {
-        enrollments,
+        hasEnrollments,
+        activeEnrollments,
+        otherEnrollments,
         isError,
         isLoading,
         error,
     } = useEnrollmentViewer({ teiId, programId })
 
     if (isLoading) {
-        return <p>Loading...</p>
+        return <LoadingSpinner />
     }
 
     if (isError || error) {
-        return <p>Error: {JSON.stringify(error, null, 2)}</p>
+        return <p>{i18n.t("Error loading enrollments")}</p>
+    }
+
+    if (!hasEnrollments || true) {
+        return <NoEnrollments />
+    }
+
+    const handleEnrollmentClick = (enrollment: any) => {
+        navigate(`enrollment?${buildUrlQueryString({
+            programId: enrollment.programId,
+            enrollmentId: enrollment.enrollment,
+            orgUnitId,
+            teiId,
+        })}`)
     }
 
     return (
-        <div
-            style={{
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '5px',
-            }}
-        >
-            {enrollments.length > 0 ? enrollments?.map((enrollment: any) => {
-                return (
-                    <div
-                        key={enrollment.enrollment}
-                    >
-                        <Button
-                            secondary
-                            onClick={() => navigate(`enrollment?${buildUrlQueryString({
-                                programId: enrollment.programId,
-                                enrollmentId: enrollment.enrollment,
-                                orgUnitId,
-                                teiId,
-                            })}`)}
-                        >
-                            {enrollment.displayName}
-                        </Button>
-                    </div>
-                );
-            }) : (
-                <p>This person has no other enrollments</p>
-            )}
+        <div className={styles.container}>
+            <EnrollmentList
+                activeEnrollments={activeEnrollments}
+                otherEnrollments={otherEnrollments}
+                orgUnitId={orgUnitId}
+                teiId={teiId}
+                onEnrollmentClick={handleEnrollmentClick}
+            />
         </div>
     );
 }

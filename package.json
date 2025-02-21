@@ -1,5 +1,5 @@
 {
-  "name": "tracker-enrollment-overview-plugin",
+  "name": "cross-program-enrollment-viewer",
   "version": "1.0.0",
   "description": "",
   "license": "BSD-3-Clause",
@@ -11,16 +11,12 @@
     "deploy": "d2-app-scripts deploy"
   },
   "devDependencies": {
-    "@dhis2/cli-app-scripts": "^10.4.0-alpha.5"
+    "@dhis2/cli-app-scripts": "^12.3.0",
+    "@types/react": "^19.0.10"
   },
   "dependencies": {
-    "@dhis2/app-runtime": "^3.10.0-alpha.6",
-    "@dhis2/ui": "^9.0.1",
-    "@material-ui/core": "3.9.4",
+    "@dhis2/app-runtime": "^3.13.2",
+    "@dhis2/ui": "^10.1.12",
     "@tanstack/react-query": "^4"
-  },
-  "resolutions": {
-    "@dhis2/ui": "^9.0.1",
-    "@dhis2/app-runtime": "^3.10.0-alpha.6"
   }
 }
