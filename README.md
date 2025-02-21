@@ -1,45 +1,81 @@
-This project was bootstrapped with [DHIS2 Application Platform](https://github.com/dhis2/app-platform).
+# DHIS2 Cross-Program Enrollment Viewer Plugin
 
-## Available Scripts
+## Overview
 
-In the project directory, you can run:
+The Cross-Program Enrollment Viewer is a DHIS2 plugin that enhances tracker applications by providing cross-program enrollment visibility. It solves a critical workflow challenge by enabling users to see and access enrollments across different programs for the same tracked entity, improving coordination and data visibility in healthcare settings.
 
-### `yarn start`
+### Key Features
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Cross-Program Visibility**: Automatically detects and displays other program enrollments for the current tracked entity
+- **Direct Navigation**: Provides quick access links to related program enrollments
+- **Seamless Integration**: Integrates naturally into the existing DHIS2 tracker interface
+- **Enhanced Coordination**: Facilitates better program coordination through improved data visibility
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Use Case Example
 
-### `yarn test`
+A health worker viewing a patient's record in a maternal health program can instantly see if the same patient is enrolled in other programs (e.g., HIV treatment program). This cross-program visibility enables healthcare workers to provide more coordinated and informed care.
 
-Launches the test runner and runs all available tests found in `/src`.<br />
+## Technical Details
 
-See the section about [running tests](https://platform.dhis2.nu/#/scripts/test) for more information.
+This project is built with the [DHIS2 Application Platform](https://github.com/dhis2/app-platform) and operates as a standalone application that can be embedded within DHIS2 tracker applications. It leverages the DHIS2 Web API to fetch and display enrollment data.
 
-### `yarn build`
+## Getting Started
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Prerequisites
 
-The build is minified and the filenames include the hashes.<br />
-A deployable `.zip` file can be found in `build/bundle`!
+- Node.js and yarn package manager
+- Access to a DHIS2 instance
+- Appropriate user permissions in DHIS2
 
-See the section about [building](https://platform.dhis2.nu/#/scripts/build) for more information.
+### Installation
 
-### `yarn deploy`
+1. Clone this repository
+2. Install dependencies:
+   ```bash
+   yarn install
+   ```
 
-Deploys the built app in the `build` folder to a running DHIS2 instance.<br />
-This command will prompt you to enter a server URL as well as the username and password of a DHIS2 user with the App Management authority.<br/>
-You must run `yarn build` before running `yarn deploy`.<br />
+### Available Scripts
 
-See the section about [deploying](https://platform.dhis2.nu/#/scripts/deploy) for more information.
+#### Development
+```bash
+yarn start
+```
+Runs the app in development mode at [http://localhost:3000](http://localhost:3000).
+The page will automatically reload on edits, and lint errors will appear in the console.
+
+#### Testing
+```bash
+yarn test
+```
+Launches the test runner and executes all tests in `/src`.
+
+#### Building
+```bash
+yarn build
+```
+Creates a production build in the `build` folder, with optimized and minified bundles.
+The deployable `.zip` file will be available in `build/bundle`.
+
+#### Deployment
+```bash
+yarn deploy
+```
+Deploys the built app to a DHIS2 instance. Requires:
+- Prior execution of `yarn build`
+- DHIS2 server URL
+- Username and password of a DHIS2 user with App Management authority
 
 ## Learn More
 
-You can learn more about the platform in the [DHIS2 Application Platform Documentation](https://platform.dhis2.nu/).
+- [DHIS2 Application Platform Documentation](https://platform.dhis2.nu/)
+- [DHIS2 Application Runtime Documentation](https://runtime.dhis2.nu/)
+- [React Documentation](https://reactjs.org/)
 
-You can learn more about the runtime in the [DHIS2 Application Runtime Documentation](https://runtime.dhis2.nu/).
+## Contributing
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Contributions are welcome! Please read our contributing guidelines and submit pull requests.
+
+## License
+
+This project is licensed under the BSD-3-Clause License.

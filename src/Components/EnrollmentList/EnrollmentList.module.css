@@ -1,0 +1,28 @@
+.container {
+    padding: 0;
+}
+
+.enrollmentSection {
+    margin-bottom: 8px;
+}
+
+.sectionTitle {
+    font-size: 0.9rem;
+    font-weight: 400;
+    margin: 0 0 10px 0;
+    color: var(--colors-grey900, #212934);
+}
+
+.enrollmentGrid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.enrollmentItem {
+    display: inline-block;
+}
+
+.enrollmentItem button {
+    text-align: left;
+}

@@ -1,115 +1,33 @@
 // @flow
 import React, { useState, useEffect, useRef, ReactNode } from 'react';
-import { withStyles } from '@material-ui/core/styles';
 import cx from 'classnames';
-import { colors, spacersNum, IconChevronUp24 } from '@dhis2/ui';
+import { IconChevronUp24 } from '@dhis2/ui';
 import { IconButton } from '../IconButton';
+import styles from './WidgetCollapsible.module.css';
 
-const styles = {
-    headerContainer: {
-        borderRadius: 3,
-        borderStyle: 'solid',
-        borderColor: colors.grey400,
-        borderWidth: 1,
-        '&.childrenVisible': {
-            borderBottomWidth: 0,
-            borderBottomLeftRadius: 0,
-            borderBottomRightRadius: 0,
-        },
-        '&.borderless': {
-            border: 'none',
-        },
-    },
-    header: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        padding: spacersNum.dp16,
-        fontWeight: 500,
-        fontSize: 16,
-        color: colors.grey800,
-    },
-    children: {
-        borderTopLeftRadius: 0,
-        borderTopRightRadius: 0,
-        borderBottomLeftRadius: 3,
-        borderBottomRightRadius: 3,
-        borderStyle: 'solid',
-        borderColor: colors.grey400,
-        borderWidth: 1,
-        borderTopWidth: 0,
-        '&.open': {
-            animation: 'slidein 200ms normal forwards ease-in-out',
-            transformOrigin: '50% 0%',
-        },
-        '&.close': {
-            animation: 'slideout 200ms normal forwards ease-in-out',
-            transformOrigin: '100% 0%',
-        },
-        '&.borderless': {
-            border: 'none',
-        },
-    },
-    toggleButton: {
-        margin: `0 0 0 ${spacersNum.dp4}px`,
-        height: '24px',
-        borderRadius: '3px',
-        color: colors.grey600,
-        '&:hover': {
-            background: colors.grey200,
-            color: colors.grey800,
-        },
-        '&.open': {
-            animation: 'flipOpen 200ms normal forwards linear',
-        },
-        '&.close': {
-            animation: 'flipClose 200ms normal forwards linear',
-        },
-        '&.closeinit': {
-            transform: 'rotateX(180deg)',
-        },
-    },
-    '@keyframes slidein': {
-        from: { transform: 'scaleY(0)' },
-        to: { transform: 'scaleY(1)' },
-    },
-    '@keyframes slideout': {
-        from: { transform: 'scaleY(1)' },
-        to: { transform: 'scaleY(0)' },
-    },
-    '@keyframes flipOpen': {
-        from: { transform: 'rotateX(180deg)' },
-        to: { transform: 'rotateX(0)' },
-    },
-    '@keyframes flipClose': {
-        from: { transform: 'rotateX(0)' },
-        to: { transform: 'rotateX(180deg)' },
-    },
+type Props = {
+    header: ReactNode;
+    open: boolean;
+    onOpen: () => void;
+    onClose: () => void;
+    color?: string;
+    borderless?: boolean;
+    children: ReactNode;
 };
 
-const WidgetCollapsiblePlain = ({
+export const WidgetCollapsible = ({
     header,
     open,
     onOpen,
     onClose,
-    color = colors.white,
+    color = 'white',
     borderless = false,
     children,
-    classes,
-}: {
-    header: ReactNode,
-    open: boolean,
-    onOpen: () => void,
-    onClose: () => void,
-    color?: string,
-    borderless?: boolean,
-    children: React$Node,
-    classes: Object,
-}) => {
+}: Props) => {
     const [childrenVisible, setChildrenVisibility] = useState(open); // controls whether children are rendered to the DOM
     const [animationsReady, setAnimationsReadyStatus] = useState(false);
     const [postEffectOpen, setPostEffectOpenStatus] = useState(open);
-    const hideChildrenTimeoutRef = useRef(null);
+    const hideChildrenTimeoutRef = useRef<NodeJS.Timeout | null>(null);
     const initialRenderRef = useRef(true);
 
     useEffect(() => {
@@ -124,7 +42,10 @@ const WidgetCollapsiblePlain = ({
 
         setPostEffectOpenStatus(open);
 
-        clearTimeout(hideChildrenTimeoutRef.current);
+        if (hideChildrenTimeoutRef.current) {
+            clearTimeout(hideChildrenTimeoutRef.current);
+        }
+
         if (open) {
             setChildrenVisibility(true);
         } else {
@@ -137,19 +58,20 @@ const WidgetCollapsiblePlain = ({
     return (
         <div style={{ backgroundColor: color }}>
             <div
-                className={cx(classes.headerContainer, {
-                    childrenVisible,
-                    borderless,
+                className={cx(styles.headerContainer, {
+                    [styles.childrenVisible]: childrenVisible,
+                    [styles.borderless]: borderless,
                 })}
             >
-                <div className={classes.header}>
+                <div className={styles.header}>
                     {header}
                     <IconButton
                         dataTest="widget-open-close-toggle-button"
-                        className={cx(classes.toggleButton, {
-                            closeinit: !animationsReady && !postEffectOpen,
-                            open: animationsReady && postEffectOpen,
-                            close: animationsReady && !postEffectOpen })}
+                        className={cx(styles.toggleButton, {
+                            [styles.closeinit]: !animationsReady && !postEffectOpen,
+                            [styles.open]: animationsReady && postEffectOpen,
+                            [styles.close]: animationsReady && !postEffectOpen
+                        })}
                         onClick={open ? onClose : onOpen}
                     >
                         <IconChevronUp24 />
@@ -160,10 +82,10 @@ const WidgetCollapsiblePlain = ({
                 childrenVisible ? (
                     <div
                         data-test="widget-contents"
-                        className={cx(classes.children, {
-                            open: animationsReady && open,
-                            close: animationsReady && !open,
-                            borderless,
+                        className={cx(styles.children, {
+                            [styles.open]: animationsReady && open,
+                            [styles.close]: animationsReady && !open,
+                            [styles.borderless]: borderless,
                         })}
                     >
                         {children}
@@ -173,5 +95,3 @@ const WidgetCollapsiblePlain = ({
         </div>
     );
 };
-
-export const WidgetCollapsible = withStyles(styles)(WidgetCollapsiblePlain);
