@@ -38,7 +38,7 @@ export const EnrollmentViewer = ({
         return <p>{i18n.t("Error loading enrollments")}</p>
     }
 
-    if (!hasEnrollments || true) {
+    if (!hasEnrollments) {
         return <NoEnrollments />
     }
 

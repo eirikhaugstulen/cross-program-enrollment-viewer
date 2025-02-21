@@ -22,12 +22,12 @@ export const EnrollmentList: React.FC<EnrollmentListProps> = ({
     otherEnrollments = [],
     onEnrollmentClick,
 }) => {
-    const renderEnrollments = (enrollments: Enrollment[], title: string, hideTitle: boolean = false) => {
+    const renderEnrollments = (enrollments: Enrollment[], title: string) => {
         if (!enrollments.length) return null;
 
         return (
             <div className={styles.enrollmentSection}>
-                {!hideTitle && <h3 className={styles.sectionTitle}>{title}</h3>}
+                <h3 className={styles.sectionTitle}>{title}</h3>
                 <div className={styles.enrollmentGrid}>
                     {enrollments.map((enrollment) => (
                         <div
@@ -49,8 +49,8 @@ export const EnrollmentList: React.FC<EnrollmentListProps> = ({
 
     return (
         <div className={styles.container}>
-            {renderEnrollments(activeEnrollments, i18n.t("Active enrollments"), otherEnrollments.length === 0)}
-            {renderEnrollments(otherEnrollments, i18n.t("Other enrollments"), activeEnrollments.length === 0)}
+            {renderEnrollments(activeEnrollments, i18n.t("Active enrollments"))}
+            {renderEnrollments(otherEnrollments, i18n.t("Other enrollments"))}
         </div>
     );
 }; 

@@ -5,8 +5,20 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2025-02-13T13:11:38.913Z\n"
-"PO-Revision-Date: 2025-02-13T13:11:38.913Z\n"
+"POT-Creation-Date: 2025-02-21T17:09:12.162Z\n"
+"PO-Revision-Date: 2025-02-21T17:09:12.162Z\n"
 
-msgid "Return to dashboard"
-msgstr "Return to dashboard"
+msgid "Active enrollments"
+msgstr "Active enrollments"
+
+msgid "Other enrollments"
+msgstr "Other enrollments"
+
+msgid "Error loading enrollments"
+msgstr "Error loading enrollments"
+
+msgid "This person has no other enrollments"
+msgstr "This person has no other enrollments"
+
+msgid "Other programs"
+msgstr "Other programs"
